@@ -1,6 +1,6 @@
 NAME = ft_push_swap
 
-SRC_FILES = main.c
+SRC_FILES = main.c stack_processor.c
 LIBFT_DIR = Libft
 LIBFT = ft
 LIB			=	-L$(LIBFT_DIR) -lft
