@@ -62,10 +62,11 @@ void ft_rx (t_list **stack, char stack_identity, int write)
 		last = last->next;
 	if (last != *stack)
 	{
-		temp = last;
-		last->prev->next = NULL;
-		last->prev = NULL;
-		ft_lstadd_front(stack, temp);
+		temp = *stack;
+		*stack = (*stack)->next;
+		(*stack)->prev = NULL;
+		temp->next = NULL;
+		ft_lstadd_back(stack, temp);
 		if (write)
 		{
 			ft_putchar_fd('r', STDOUT_FILENO);
