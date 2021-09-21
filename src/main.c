@@ -86,9 +86,19 @@ int main(int argc, char** argv)
 
 	get_args(argc, argv, &int_lst);
 	sorted = copy_stack(int_lst);
-	stack_a = copy_stack(int_lst);
 	ft_sort(sorted);
-	index_stack(stack_a, sorted);
+	index_stack(int_lst, sorted);
+	stack_a = copy_stack(int_lst);
+	ft_rx(&stack_a, 'a', 1);
+	print_stacks(stack_a, stack_b);
+
+	ft_rx(&stack_a, 'a', 1);
+	print_stacks(stack_a, stack_b);
+
+	ft_rx(&stack_a, 'a', 1);
+	print_stacks(stack_a, stack_b);
+
+	ft_rx(&stack_b, 'b', 1);
 	print_stacks(stack_a, stack_b);
 
 	//ft_sx(&int_lst, 'a', 1);

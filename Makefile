@@ -2,7 +2,7 @@ NAME = ft_push_swap
 
 SRC_FILES = main.c stack_processor.c utils.c sort_utils.c
 LIBFT_DIR = Libft
-LIBFT = ft
+LIBFT = /Libft/libft.a
 LIB			=	-L$(LIBFT_DIR) -lft
 INCLUDES = includes
 FLAGS		=	-Wall -Wextra -Werror -std=c99 -g #-fsanitize=leak \
@@ -15,10 +15,11 @@ OBJS		= 	${SRC:.c=.o}
 %.o:		%.c
 			$(CC) $(FLAGS) -c $< -o $@
 
-all : $(LIBRARY) $(NAME)
+all : LIBFT $(NAME)
 
 $(NAME):	$(OBJS) $(INCLUDES)/push_swap.h
 			$(CC) $(FLAGS) -o $@ $^ $(LIB)
 
-$(LIBRARY) :
+LIBFT :
+	make -C $(LIBFT_DIR)
 	make bonus -C $(LIBFT_DIR)
