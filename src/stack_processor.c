@@ -74,3 +74,44 @@ void ft_rx (t_list **stack, char stack_identity, int write)
 		}
 	}
 }
+
+void ft_rrx (t_list **stack, char stack_identity, int write)
+{
+	t_list *last;
+	t_list *temp;
+	last = *stack;
+	if (!stack || !(*stack))
+		return ;
+	while(last->next)
+		last = last->next;
+	if (last != *stack)
+	{
+		temp = *stack;
+		*stack = (*stack)->next;
+		(*stack)->prev = NULL;
+		temp->next = NULL;
+		ft_lstadd_back(stack, temp);
+		if (write)
+		{
+			ft_putstr_fd("rr", STDOUT_FILENO);
+			ft_putchar_fd(stack_identity, STDOUT_FILENO);
+			ft_putchar_fd('\n', STDOUT_FILENO);
+		}
+	}
+}
+
+void	ft_rrr(t_list **stack_a, t_list **stack_b, int write)
+{
+	ft_rrx(stack_a, 'a', 0);
+	ft_rrx(stack_b, 'b', 0);
+	if (write)
+		ft_putstr_fd("rrr\n", STDOUT_FILENO);
+}
+
+void	ft_rr(t_list **stack_a, t_list **stack_b, int write)
+{
+	ft_rx(stack_a, 'a', 0);
+	ft_rx(stack_b, 'b', 0);
+	if (write)
+		ft_putstr_fd("rr\n", STDOUT_FILENO);
+}

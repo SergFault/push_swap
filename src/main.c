@@ -89,16 +89,16 @@ int main(int argc, char** argv)
 	ft_sort(sorted);
 	index_stack(int_lst, sorted);
 	stack_a = copy_stack(int_lst);
-	ft_rx(&stack_a, 'a', 1);
+	ft_rrx(&stack_a, 'a', 1);
 	print_stacks(stack_a, stack_b);
 
-	ft_rx(&stack_a, 'a', 1);
+	ft_rrx(&stack_a, 'a', 1);
 	print_stacks(stack_a, stack_b);
 
-	ft_rx(&stack_a, 'a', 1);
+	ft_rrx(&stack_a, 'a', 1);
 	print_stacks(stack_a, stack_b);
 
-	ft_rx(&stack_b, 'b', 1);
+	ft_rrx(&stack_b, 'b', 1);
 	print_stacks(stack_a, stack_b);
 
 	//ft_sx(&int_lst, 'a', 1);
