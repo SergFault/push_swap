@@ -2,6 +2,8 @@
 # define FT_PUSH_SWAP_H
 
 #include "../Libft/libft.h"
+#include <stddef.h>
+#include <limits.h>
 
 typedef struct s_int_cont
 {
@@ -13,5 +15,7 @@ typedef struct s_int_cont
 void ft_sx(t_list **stack_x, char stack_identity, int write);
 void ft_ss(t_list **stack_a, t_list **stack_b, int write);
 t_list *copy_stack(t_list *list);
+void index_stack(t_list *stack, t_list *sorted);
+void ft_sort(t_list *list);
 
 #endif
