@@ -18,3 +18,11 @@ void ft_sx(t_list **stack_x, char stack_identity, int write)
 		ft_putchar_fd('\n', 1);
 	}
 }
+
+void ft_ss(t_list **stack_a, t_list **stack_b, int write)
+{
+	ft_sx(stack_a, 'a', 0);
+	ft_sx(stack_b, 'b', 0);
+	if (write)
+		ft_putstr_fd("ss\n", STDOUT_FILENO);
+}

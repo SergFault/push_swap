@@ -1,12 +1,7 @@
 #include "../includes/push_swap.h"
 
 #include <stdio.h>
-typedef struct s_int_cont
-{
-	int val;
-	int index;
-	int round;
-} t_int_cont;
+
 
 t_int_cont *new_int(char *str_int)
 {
@@ -53,12 +48,22 @@ int get_args(int argc, char **argv, t_list **lst)
 int main(int argc, char** argv)
 {
     t_list *int_lst;
+	t_list *stack_a;
+	t_list *stack_b;
 
 	int_lst = NULL;
+	stack_a = NULL;
+	stack_b = NULL;
+
 	get_args(argc, argv, &int_lst);
+	stack_a = copy_stack(int_lst);
+	stack_b = copy_stack(int_lst);
 
 	print_lst(int_lst);
-	ft_sx(&int_lst, 'a', 1);
-	print_lst(int_lst);
+	print_lst(stack_a);
+	print_lst(stack_b);
+
+	//ft_sx(&int_lst, 'a', 1);
+	//print_lst(int_lst);
 
 }
