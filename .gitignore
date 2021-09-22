@@ -1,2 +1,5 @@
 *.o
 ft_push_swap
+checker_linux
+checker
+test/

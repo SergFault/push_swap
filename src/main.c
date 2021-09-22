@@ -13,6 +13,7 @@ t_int_cont *new_int(char *str_int)
 	cont->val = i;
 	cont->index = 0;
 	cont->round = 0;
+	cont->sorted = 0;
 	return cont;
 }
 
@@ -36,21 +37,23 @@ void print_stacks(t_list *stack_a, t_list *stack_b)
 		if (stack_a) {
 			printf("index %d \t", ((t_int_cont *) stack_a->content)->index);
 			printf("round %d \t", ((t_int_cont *) stack_a->content)->round);
-			printf("val %d \t|", ((t_int_cont *) stack_a->content)->val);
+			printf("val %d \t", ((t_int_cont *) stack_a->content)->val);
+			printf("sorted %d \t|", ((t_int_cont *) stack_a->content)->sorted);
 			stack_a = stack_a->next;
 		} else
 		{
-			printf("NULL      \tNULL      \tNULL  \t|");
+			printf("NULL      \tNULL      \tNULL       \tNULL  \t|");
 		}
 		printf("\t\t");
 		if (stack_b) {
 			printf("index %d \t", ((t_int_cont *) stack_b->content)->index);
 			printf("round %d \t", ((t_int_cont *) stack_b->content)->round);
 			printf("val %d \t", ((t_int_cont *) stack_b->content)->val);
+			printf("sorted %d \t|", ((t_int_cont *) stack_b->content)->sorted);
 			stack_b = stack_b->next;
 		} else
 		{
-			printf("NULL      \tNULL      \tNULL  \t|");
+			printf("NULL      \tNULL      \tNULL       \tNULL  \t|");
 		}
 		printf("\n");
 	}
@@ -73,78 +76,166 @@ int get_args(int argc, char **argv, t_list **lst)
     return (0);
 }
 
-int sort(t_list **stack_a_ptr, t_list **stack_b_ptr, t_list *sorted)
+//int sort(t_list **stack_a_ptr, t_list **stack_b_ptr, t_list *sorted)
+//{
+//	int max;
+//	int c;
+//	t_list *stack_a;
+//	t_list *stack_b;
+//
+//	stack_a = *stack_a_ptr;
+//	stack_b = *stack_b_ptr;
+//
+//	c = 0;
+//	max = 0;
+//	while (sorted)
+//	{
+//		sorted = sorted->next;
+//		max++;
+//	}
+//
+//	while(stack_a)
+//	{
+//		if (((t_int_cont *) (stack_a->content))->index == c)
+//		{
+//			ft_px(&stack_a, &stack_b, 'b', 1);
+//			c++;
+//		}
+//		else
+//		{
+//			ft_rx(&stack_a,'a', 1);
+//		}
+//	}
+//	c = 0;
+//	while(c < max)
+//	{
+//		ft_px(&stack_a, &stack_b, 'a', 1);
+//		c++;
+//	}
+//	*stack_a_ptr = stack_a;
+//	*stack_b_ptr = stack_b;
+//	return (1);
+//}
+
+void init_set(t_set *set)
 {
+	set->s_data->next = 0;
+	set->s_data->max = 0;
+	set->s_data->mid = 0;
+	set->s_data->min = 0;
+	set->s_data->size = 0;
+	set->s_data->round = 1;
+	set->int_lst = NULL;
+	set->sorted = NULL;
+	set->stack_a = NULL;
+	set->stack_b = NULL;
+}
+
+int get_stack_data(t_set *set, t_list *stack)
+{
+	int min;
 	int max;
-	int c;
-	t_list *stack_a;
-	t_list *stack_b;
 
-	stack_a = *stack_a_ptr;
-	stack_b = *stack_b_ptr;
-
-
-	c = 0;
-	max = 0;
-	while (sorted)
+	set->s_data->size = 0;
+	min = ((t_int_cont *)stack->content)->index;
+	max = ((t_int_cont *)stack->content)->index;
+	while(stack)
 	{
-		sorted = sorted->next;
-		max++;
+		if (((t_int_cont *)stack->content)->index > max)
+			max = ((t_int_cont *)stack->content)->index;
+		if (((t_int_cont *)stack->content)->index < min)
+			min = ((t_int_cont *)stack->content)->index;
+		stack = stack->next;
+		set->s_data->size++;
 	}
+	set->s_data->max = max;
+	set->s_data->min = min;
+	set->s_data->mid = min + ((max - min) / 2);
+	return (1);
+}
 
-	while(stack_a)
+int split_to_b(t_set *set)
+{
+	int size;
+	int curr_ch;
+
+	get_stack_data(set, set->stack_a);
+	curr_ch =  ((t_int_cont *) (set->stack_a->content))->round;
+	size = set->s_data->size;
+	while(size-- && !(((t_int_cont *)set->stack_a->content)->sorted)
+			&& curr_ch == (((t_int_cont *)set->stack_a->content)->round))
 	{
-		if (((t_int_cont *) (stack_a->content))->index == c)
+		if ((((t_int_cont *)set->stack_a->content)->index) != set->s_data->next)
+			ft_px(&set->stack_a, &set->stack_b, 'b', 1);
+		else
 		{
-			ft_rx(&stack_a, 'a', 1);
-			c++;
-			break ;
+			((t_int_cont *)set->stack_a->content)->sorted = 1;
+			ft_rx(&set->stack_a, 'a', 1);
+			set->s_data->next++;
+		}
+	}
+	return (1);
+}
+
+int split_to_a(t_set *set)
+{
+	int size;
+
+	get_stack_data(set, set->stack_b);
+	size = set->s_data->size;
+	while(size-- && set->stack_b)
+	{
+		if ((((t_int_cont *)set->stack_b->content)->index) == set->s_data->next)
+		{
+			((t_int_cont *) set->stack_b->content)->sorted = 1;
+			ft_px(&set->stack_a, &set->stack_b, 'a', 1);
+			ft_rx(&set->stack_a, 'a', 1);
+			set->s_data->next++;
+		}
+		if (set->stack_b && (((t_int_cont *)set->stack_b->content)->index) >
+		set->s_data->mid)
+		{
+			((t_int_cont *) set->stack_b->content)->round = set->s_data->round;
+			ft_px(&set->stack_a, &set->stack_b, 'a', 1);
 		}
 		else
 		{
-			ft_px(&stack_a, &stack_b, 'b', 1);
+			ft_rx(&set->stack_b, 'b', 1);
 		}
 	}
-	while(c < max)
-	{
-		while(stack_b && (c < max))
-		{
-			if (((t_int_cont *) (stack_b->content))->index == c)
-			{
-				ft_px(&stack_a, &stack_b, 'a', 1);
-				ft_rx(&stack_a, 'a', 1);
-				c++;
-			}
-			else
-			{
-				ft_rx(&stack_b, 'b', 1);
-			}
-		}
-	}
-	*stack_a_ptr = stack_a;
-	*stack_b_ptr = stack_b;
+	set->s_data->round++;
 	return (1);
+}
+
+int sort(t_set *set)
+{
+	while(!((t_int_cont *)set->stack_a->content)->sorted)
+	{
+		split_to_b(set);
+//		print_stacks(set->stack_a, set->stack_b);
+		while (set->stack_b) {
+			split_to_a(set);
+//			print_stacks(set->stack_a, set->stack_b);
+		}
+//		print_stacks(set->stack_a, set->stack_b);
+	}
+	return 0;
 }
 
 int main(int argc, char** argv)
 {
-    t_list *int_lst;
-	t_list *sorted;
-	t_list *stack_a;
-	t_list *stack_b;
+	t_set set;
 
-	int_lst = NULL;
-	stack_a = NULL;
-	stack_b = NULL;
+	init_set(&set);
 
-	get_args(argc, argv, &int_lst);
-	sorted = copy_stack(int_lst);
-	ft_sort(sorted);
+	get_args(argc, argv, &set.int_lst);
+	set.sorted = copy_stack(set.int_lst);
+	ft_sort(set.sorted);
 //	print_lst(sorted);
-	stack_a = copy_stack(int_lst);
-	index_stack(stack_a, sorted);
+	set.stack_a = copy_stack(set.int_lst);
+	index_stack(set.stack_a, set.sorted);
 //	print_stacks(stack_a, stack_b);
-	sort(&stack_a, &stack_b, sorted);
+	sort(&set);
 //	print_stacks(stack_a, stack_b);
 //	ft_rrx(&stack_a, 'a', 1);
 //	print_stacks(stack_a, stack_b);

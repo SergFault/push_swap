@@ -35,7 +35,7 @@ void index_stack(t_list *stack, t_list *sorted)
 	{
 		while (iter)
 		{
-			if ( ((t_int_cont*)iter->content)->val ==
+			if (((t_int_cont*)iter->content)->val ==
 				(((t_int_cont*)(sorted->content))->val))
 			{
 				((t_int_cont*)iter->content)->index = index++;

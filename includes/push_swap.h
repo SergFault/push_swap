@@ -5,11 +5,30 @@
 #include <stddef.h>
 #include <limits.h>
 
+typedef struct s_data
+{
+	int next;
+	int round;
+	int min;
+	int mid;
+	int max;
+	int size;
+} t_data;
+
+typedef struct s_set{
+	t_data *s_data;
+	t_list *int_lst;
+	t_list *sorted;
+	t_list *stack_a;
+	t_list *stack_b;
+} t_set;
+
 typedef struct s_int_cont
 {
 	int val;
 	int index;
 	int round;
+	int sorted;
 } t_int_cont;
 
 void ft_sx(t_list **stack_x, char stack_identity, int write);

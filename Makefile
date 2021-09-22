@@ -1,4 +1,4 @@
-NAME = ft_push_swap
+NAME = push_swap
 
 SRC_FILES = main.c stack_processor.c utils.c sort_utils.c
 LIBFT_DIR = Libft
