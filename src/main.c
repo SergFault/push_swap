@@ -131,6 +131,54 @@ void init_set(t_set *set)
 	set->stack_b = NULL;
 }
 
+int two_node_sort(t_list **stack)
+{
+	int val1;
+	int val2;
+
+	val1 = ((t_int_cont *)((*stack)->content))->index;
+	val2 = ((t_int_cont *)((*stack)->next->content))->index;
+
+	if (val1 > val2)
+	{
+		ft_sx(stack, 'b', 1);
+	}
+	return (1);
+}
+
+int small_sort_b(t_list **stack_b)
+{
+	int val1;
+	int val2;
+	int val3;
+
+	val1 = ((t_int_cont *)((*stack_b)->content))->index;
+	val2 = ((t_int_cont *)((*stack_b)->next->content))->index;
+	val3 = ((t_int_cont *)((*stack_b)->next->next->content))->index;
+	if (val1 < val3 && val3 < val2)
+	{
+		ft_sx(stack_b, 'b', 1);
+		ft_rx(stack_b, 'b', 1);
+	} else if (val2 < val1 && val1 < val3)
+	{
+		ft_sx(stack_b, 'b', 1);
+	}
+	else if  (val3 < val1 && val1 < val2)
+	{
+		ft_rrx(stack_b, 'b', 1);
+	}
+	else if  (val3 < val2 && val2 < val1)
+	{
+		ft_sx(stack_b, 'b', 1);
+		ft_rrx(stack_b, 'b', 1);
+	}
+	else if  (val2 < val3 && val3 < val1)
+	{
+		ft_rx(stack_b, 'b', 1);
+	}
+	return (1);
+}
+
 int get_stack_data(t_set *set, t_list *stack)
 {
 	int min;
@@ -154,6 +202,23 @@ int get_stack_data(t_set *set, t_list *stack)
 	return (1);
 }
 
+int get_round_size(t_list *stack)
+{
+	int count;
+	int round;
+
+	count = 0;
+	round = ((t_int_cont *)stack->content)->round;
+
+	while(stack && ((t_int_cont *)stack->content)->round == round)
+	{
+		stack = stack->next;
+		count++;
+	}
+
+	return (count);
+}
+
 int split_to_b(t_set *set)
 {
 	int size;
@@ -162,17 +227,37 @@ int split_to_b(t_set *set)
 	get_stack_data(set, set->stack_a);
 	curr_ch =  ((t_int_cont *) (set->stack_a->content))->round;
 	size = set->s_data->size;
+//	if (get_round_size(set->stack_a) == 2)
+//	{
+////		ft_putstr_fd("HIT2\n", 1);
+////		print_stacks(set->stack_a, set->stack_b);
+//		two_node_sort(&set->stack_a);
+//	}
 	while(size-- && !(((t_int_cont *)set->stack_a->content)->sorted)
 			&& curr_ch == (((t_int_cont *)set->stack_a->content)->round))
 	{
-		if ((((t_int_cont *)set->stack_a->content)->index) != set->s_data->next)
-			ft_px(&set->stack_a, &set->stack_b, 'b', 1);
-		else
+		if (((((t_int_cont *)set->stack_a->content)->index) !=
+		set->s_data->next))
 		{
+			ft_px(&set->stack_a, &set->stack_b, 'b', 1);
+		}
+		else // ((((t_int_cont *)set->stack_a->content)->index) ==
+			//	  set->s_data->next)
+		{
+			//print_stacks(set->stack_a, set->stack_b);
 			((t_int_cont *)set->stack_a->content)->sorted = 1;
 			ft_rx(&set->stack_a, 'a', 1);
 			set->s_data->next++;
 		}
+		//else if ((((t_int_cont *)set->stack_a->next->content)->index) ==
+//				 set->s_data->next)
+//		{
+//			print_stacks(set->stack_a, set->stack_b);
+//			ft_sx(&set->stack_a, 'a', 1);
+//			((t_int_cont *)set->stack_a->content)->sorted = 1;
+//			ft_rx(&set->stack_a, 'a', 1);
+//			set->s_data->next++;
+//		}
 	}
 	return (1);
 }
@@ -182,11 +267,21 @@ int split_to_a(t_set *set)
 	int size;
 
 	get_stack_data(set, set->stack_b);
+
 	size = set->s_data->size;
-	while(size-- && set->stack_b)
+
+		if (size == 3)
+		{
+//			print_stacks(set->stack_a, set->stack_b);
+//			ft_putstr_fd("HIT3\n", 1);
+			small_sort_b(&set->stack_b);
+		}
+
+	while(size-- && set->stack_b)// && pushes)
 	{
 		if ((((t_int_cont *)set->stack_b->content)->index) == set->s_data->next)
 		{
+//			print_stacks(set->stack_a, set->stack_b);
 			((t_int_cont *) set->stack_b->content)->sorted = 1;
 			ft_px(&set->stack_a, &set->stack_b, 'a', 1);
 			ft_rx(&set->stack_a, 'a', 1);
@@ -195,11 +290,13 @@ int split_to_a(t_set *set)
 		if (set->stack_b && (((t_int_cont *)set->stack_b->content)->index) >
 		set->s_data->mid)
 		{
+//			print_stacks(set->stack_a, set->stack_b);
 			((t_int_cont *) set->stack_b->content)->round = set->s_data->round;
 			ft_px(&set->stack_a, &set->stack_b, 'a', 1);
 		}
 		else
 		{
+//			print_stacks(set->stack_a, set->stack_b);
 			ft_rx(&set->stack_b, 'b', 1);
 		}
 	}
@@ -211,6 +308,8 @@ int sort(t_set *set)
 {
 	while(!((t_int_cont *)set->stack_a->content)->sorted)
 	{
+//		print_stacks(set->stack_a, set->stack_b);
+//		ft_putstr_fd("split to b\n", 1);
 		split_to_b(set);
 //		print_stacks(set->stack_a, set->stack_b);
 		while (set->stack_b) {

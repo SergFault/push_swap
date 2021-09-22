@@ -79,7 +79,6 @@ void ft_rx (t_list **stack, char stack_identity, int write)
 void ft_rrx (t_list **stack, char stack_identity, int write)
 {
 	t_list *last;
-	t_list *temp;
 	last = *stack;
 	if (!stack || !(*stack))
 		return ;
@@ -87,11 +86,10 @@ void ft_rrx (t_list **stack, char stack_identity, int write)
 		last = last->next;
 	if (last != *stack)
 	{
-		temp = *stack;
-		*stack = (*stack)->next;
-		(*stack)->prev = NULL;
-		temp->next = NULL;
-		ft_lstadd_back(stack, temp);
+		last->prev->next = NULL;
+		last->prev = NULL;
+		last->next = NULL;
+		ft_lstadd_front(stack, last);
 		if (write)
 		{
 			ft_putstr_fd("rr", STDOUT_FILENO);
