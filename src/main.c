@@ -361,6 +361,50 @@ int rotate_sorted_bottom(t_list **stack_a)
 	return (1);
 }
 
+void move_sorted_a(t_set *set)
+{
+	((t_int_cont *) set->stack_a->content)->sorted = 1;
+	ft_rx(&set->stack_a, 'a', 1);
+	set->s_data->next++;
+}
+
+int sort_two(t_list **stack, char st_ident)
+{
+	if ((((t_int_cont *)(*stack)->content)->index
+			> ((((t_int_cont *)(*stack)->next->content)->index))))
+	{
+		ft_sx(stack, st_ident, 1);
+		return 1;
+	}
+	return 0;
+}
+
+int try_first_two(t_set *set)
+{
+	int changes;
+	int ret;
+
+	ret = 0;
+	changes = 1;
+	while (!(needs_rotate(&set->stack_a)) && changes)
+	{
+		changes = 0;
+		if ((((t_int_cont *) set->stack_a->content)->index) ==
+			set->s_data->next) {
+			move_sorted_a(set);
+			changes = 1;
+			ret = 1;
+		}
+		if ((((t_int_cont *) set->stack_a->next->content)->index) ==
+			set->s_data->next) {
+			ret = sort_two(&set->stack_a, 'a');
+//			print_stacks(set->stack_a, set->stack_b);
+			changes = 1;
+		}
+	}
+	return (ret);
+}
+
 int split_to_b(t_set *set)
 {
 	int size;
@@ -369,58 +413,19 @@ int split_to_b(t_set *set)
 	get_stack_data_round(set, set->stack_a);
 	curr_ch =  ((t_int_cont *) (set->stack_a->content))->round;
 	size = set->s_data->size;
-//	if (get_round_size(set->stack_a) == 2)
-//	{
-////		ft_putstr_fd("HIT2\n", 1);
-////		print_stacks(set->stack_a, set->stack_b);
-//		two_node_sort(&set->stack_a);
-//	}
+
 	while(size-- && !(((t_int_cont *)set->stack_a->content)->sorted)
 			&& curr_ch == (((t_int_cont *)set->stack_a->content)->round))
 	{
-//		if (((((t_int_cont *)set->stack_a->content)->index) !=
-//		set->s_data->next))
-//		{
-			if ((((t_int_cont *)set->stack_a->content)->index) <=
-			set->s_data->mid )
+			try_first_two(set);
+			if ((((((t_int_cont *)set->stack_a->content)->index) <=
+				set->s_data->mid)) &&
+				(((((t_int_cont *)set->stack_a->content)->sorted) == 0)))
 			{
-					if ((!(needs_rotate(&set->stack_a))) &&
-							((((t_int_cont *)set->stack_a->content)->index) ==
-							 set->s_data->next))
-					{
-						((t_int_cont *) set->stack_a->content)->sorted = 1;
-						ft_rx(&set->stack_a, 'a', 1);
-						set->s_data->next++;
-					}
-
-					else
-					{
-					ft_px(&set->stack_a, &set->stack_b, 'b', 1);
-					}
+						ft_px(&set->stack_a, &set->stack_b, 'b', 1);
 			}
-			else
+			else if (((((t_int_cont *)set->stack_a->content)->sorted) == 0))
 				ft_rx(&set->stack_a, 'a', 1);
-//		}
-//		else // ((((t_int_cont *)set->stack_a->content)->index) ==
-//				  set->s_data->next)
-//		{
-//			ft_putstr_fd("FOUND\n", 1);
-//			rotate_sorted_bottom(&set->stack_a);
-//			print_stacks(set->stack_a, set->stack_b);
-//			((t_int_cont *)set->stack_a->content)->sorted = 1;
-//			ft_rx(&set->stack_a, 'a', 1);
-//			set->s_data->next++;
-//			print_stacks(set->stack_a, set->stack_b);
-//		}
-//		else if ((((t_int_cont *)set->stack_a->next->content)->index) ==
-//				 set->s_data->next)
-//		{
-//			print_stacks(set->stack_a, set->stack_b);
-//			ft_sx(&set->stack_a, 'a', 1);
-//			((t_int_cont *)set->stack_a->content)->sorted = 1;
-//			ft_rx(&set->stack_a, 'a', 1);
-//			set->s_data->next++;
-//		}
 	}
 	rotate_sorted_bottom(&set->stack_a);
 	return (1);
@@ -436,8 +441,6 @@ int split_to_a(t_set *set)
 
 		if (size == 3)
 		{
-//			print_stacks(set->stack_a, set->stack_b);
-//			ft_putstr_fd("HIT3\n", 1);
 			small_sort_b(&set->stack_b);
 		}
 
