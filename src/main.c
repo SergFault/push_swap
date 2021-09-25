@@ -153,17 +153,33 @@ int try_swap_a(t_set *set)
 	return (0);
 }
 
+int is_last_sorted(t_list *stack)
+{
+	if (!stack)
+		return (0);
+	while(stack->next)
+	{
+		stack = stack->next;
+	}
+	if (CONT(stack)->sorted)
+		return (1);
+	return (0);
+}
+
 int first_split(t_set *set){
 
 
 	get_stack_data_round(set, set->stack_a);
 	while(has_lower(set->stack_a, set->s_data->mid))
 	{
-//		if (is_next_eq(set->stack_a, set->s_data->next) && !needs_rotate_a(set))
-//		{
-//			to_sorted('a', set);
-//			continue ;
-//		}
+		if (is_next_eq(set->stack_a, set->s_data->next))
+		{
+			set->s_data->next++;
+			CONT(set->stack_a)->sorted = 1;
+			perform(PB, set);
+			perform(RB, set);
+			continue ;
+		}
 		if (lo_e(set->stack_a, set->s_data->mid)
 				 || CONT(set->stack_a)->round > 0)
 		{
@@ -175,12 +191,15 @@ int first_split(t_set *set){
 			perform(RA, set);
 		}
 	}
-//	while (needs_rotate_a(set))
-//	{
-////		perform(RRA, set);
-//		rra_or_rrr(set);
-//	}
-//	print_stacks(set->stack_a, set->stack_b);
+	while(is_last_sorted(set->stack_b))
+	{
+		perform(RRB, set);
+		perform(PA, set);
+	}
+	while(CONT(set->stack_a)->sorted)
+	{
+		perform(RA, set);
+	}
 	return (1);
 }
 
@@ -278,6 +297,7 @@ int sort(t_set *set)
 		split_to_b(set);
 //		print_stacks(set->stack_a, set->stack_b);
 	}
+//	PRINT
 	return 0;
 }
 
