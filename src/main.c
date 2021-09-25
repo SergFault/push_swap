@@ -381,19 +381,43 @@ int try_first_b(t_set *set)
 		changes = 0;
 		if (set->stack_b && (((t_int_cont *) set->stack_b->content)->index) ==
 			set->s_data->next) {
+//			ft_putstr_fd("HERE\n", 1);
 //			ft_putstr_fd("try first b\n", 1);
 			move_sorted_b(set);
 			changes = 1;
 			ret++;
 		}
-//		else if (set->stack_b && set->stack_b->next && (((t_int_cont *)
-//		set->stack_b->next->content)
-//		->index) == set->s_data->next) {
-////			print_stacks(set->stack_a, set->stack_b);
-//			sort_two(&set->stack_b, 'b');
-////			print_stacks(set->stack_a, set->stack_b);
-//			changes = 1;
-//		}
+	}
+	return (ret);
+}
+
+int try_last_b(t_set *set)
+{
+	int changes;
+	int ret;
+	t_list *iter;
+
+	iter = set->stack_b;
+	while(iter && iter->next)
+	{
+		iter = iter->next;
+	}
+
+	ret = 0;
+	changes = 1;
+	while (changes)
+	{
+		changes = 0;
+		if (iter && (((t_int_cont *) iter->content)->index) ==
+							set->s_data->next) {
+			print_stacks(set->stack_a, set->stack_b);
+			ft_putstr_fd("HERE\n", 1);
+			ft_putstr_fd("try last b\n", 1);
+			ft_rrx(&set->stack_b, 'b', 1);
+			move_sorted_b(set);
+			changes = 1;
+			ret++;
+		}
 	}
 	return (ret);
 }
@@ -446,6 +470,25 @@ int do_swap(t_set *set)
 	return (ret);
 }
 
+int first_split(t_set *set){
+
+	get_stack_data_round(set, set->stack_a);
+
+	while(has_lo_eq(set->stack_a, set->s_data->mid, 100))
+	{
+		if (((((t_int_cont *)set->stack_a->content)->index) <=
+			  set->s_data->mid))
+		{
+			ft_px(&set->stack_a, &set->stack_b, 'b', 1);
+		}
+		else
+		{
+			ft_rx(&set->stack_a, 'a', 1);
+		}
+	}
+	return (1);
+}
+
 int split_to_b(t_set *set){
 	int size;
 	int curr_ch;
@@ -453,47 +496,58 @@ int split_to_b(t_set *set){
 
 	if (!(needs_rotate(&set->stack_a)))
 		do_swap(set);
-
 	try_first_a(set);
 
 	get_stack_data_round(set, set->stack_a);
 	curr_ch =  ((t_int_cont *) (set->stack_a->content))->round;
 	size = set->s_data->size;
 	while(size && !(((t_int_cont *)set->stack_a->content)->sorted)
-			&& curr_ch == (((t_int_cont *)set->stack_a->content)->round)
-			&& has_lo_eq(set->stack_a, set->s_data->mid, size))
+			&& curr_ch == (((t_int_cont *)set->stack_a->content)->round))
+			//&& has_lo_eq(set->stack_a, set->s_data->mid, size))
 	{
 			if (!(needs_rotate(&set->stack_a)))
 				size -= do_swap(set);
 			size -= try_first_a(set);
 			if (size <= 0)
 				break;
-			if ((((((t_int_cont *)set->stack_a->content)->index) <=
-				set->s_data->mid)) &&
-				(((((t_int_cont *)set->stack_a->content)->sorted) == 0)))
+//			if ((((((t_int_cont *)set->stack_a->content)->index) <=
+//				set->s_data->mid)) &&
+//				(((((t_int_cont *)set->stack_a->content)->sorted) == 0)))
+
+//		if ((((t_int_cont *)set->stack_a->content)->sorted) == 0) {
+//			if (curr_ch == (((t_int_cont *) set->stack_a->content)->round)) {
+//				if ((((((t_int_cont *) set->stack_a->content)->index) <=
+//					  set->s_data->mid)))
+//					ft_px(&set->stack_a, &set->stack_b, 'b', 1);
+//				else
+//					ft_rx(&set->stack_a, 'a', 1);
+//			}
+//		}
+//		if (size <= 1)
+//			break;
+
+		if ((((t_int_cont *)set->stack_a->content)->sorted) == 0)
+		{
+			if (curr_ch == 0)
 			{
-						ft_px(&set->stack_a, &set->stack_b, 'b', 1);
+				if ((((((t_int_cont *)set->stack_a->content)->index) <=
+				set->s_data->mid)))
+					ft_px(&set->stack_a, &set->stack_b, 'b', 1);
+				else
+					ft_rx(&set->stack_a, 'a', 1);
 			}
-			else if ((((t_int_cont *)set->stack_a->content)->sorted) == 0 &&
-			size != 1) {
-				ft_rx(&set->stack_a, 'a', 1);
+			else if (curr_ch == (((t_int_cont *)set->stack_a->content)->round))
+			{
+				ft_px(&set->stack_a, &set->stack_b, 'b', 1);
 			}
+		}
+//				if (size <= 1)
+//			break;
+
 		size--;
 	}
 	rotate_sorted_bottom(&set->stack_a, &set->stack_b, set);
 	return (1);
-}
-int get_total_size(t_list *stack)
-{
-	int c;
-
-	c = 0;
-	while(stack)
-	{
-		c++;
-		stack = stack->next;
-	}
-	return (c);
 }
 
 int split_to_a(t_set *set)
@@ -501,14 +555,20 @@ int split_to_a(t_set *set)
 	int size;
 
 
+
 	try_first_b(set);
+//	try_last_b(set);
 	get_stack_data(set, set->stack_b);
 	size = set->s_data->size;
 
-	while(set->stack_b && size)
+	if (size == 3)
+		small_sort_b(&set->stack_b);
+
+	while(set->stack_b) // && size)
 	{
 
 		size -= try_first_b(set);
+//		size -= try_last_b(set);
 
 		if (!(has_bigger(set->stack_b, set->s_data->mid))) {
 //			ft_putchar_fd(set->s_data->mid + '0', 1);
@@ -530,32 +590,44 @@ int split_to_a(t_set *set)
 //			print_stacks(set->stack_a, set->stack_b);
 //			ft_putstr_fd("HERE\n", 1);
 
-			ft_rx(&set->stack_b, 'b', 1);
+				ft_rx(&set->stack_b, 'b', 1);
 		}
-		size--;
+		//size--;
 	}
 	set->s_data->round++;
 	return (1);
 }
 
+int is_sorted(t_list *stack_a )
+{
+	while(stack_a)
+	{
+		if (!((t_int_cont *)stack_a->content)->sorted)
+			return (0);
+		stack_a = stack_a->next;
+	}
+	return (1);
+}
+
 int sort(t_set *set)
 {
-	while(!((t_int_cont *)set->stack_a->content)->sorted)
+//	first_split(set);
+	while (!(is_sorted(set->stack_a)) || (set->stack_b))
 	{
-
-		print_stacks(set->stack_a, set->stack_b);
-		ft_putstr_fd("split to b\n", 1);
-
-		split_to_b(set);
 		while (set->stack_b) {
 
-			ft_putstr_fd("split to a\n", 1);
-			print_stacks(set->stack_a, set->stack_b);
+//			ft_putstr_fd("split to a\n", 1);
+//			print_stacks(set->stack_a, set->stack_b);
 
 			split_to_a(set);
 		}
-		print_stacks(set->stack_a, set->stack_b);
+
+//		print_stacks(set->stack_a, set->stack_b);
+//		ft_putstr_fd("split to b\n", 1);
+
+		split_to_b(set);
 	}
+//	print_stacks(set->stack_a, set->stack_b);
 	return 0;
 }
 
