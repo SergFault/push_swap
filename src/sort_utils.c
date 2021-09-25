@@ -47,3 +47,69 @@ void index_stack(t_list *stack, t_list *sorted)
 		sorted = sorted->next;
 	}
 }
+
+int small_sort_b(t_list **stack_b)
+{
+	int val1;
+	int val2;
+	int val3;
+
+	val1 = ((t_int_cont *)((*stack_b)->content))->index;
+	val2 = ((t_int_cont *)((*stack_b)->next->content))->index;
+	val3 = ((t_int_cont *)((*stack_b)->next->next->content))->index;
+	if (val1 < val3 && val3 < val2)
+	{
+		ft_sx(stack_b, 'b', 1);
+		ft_rx(stack_b, 'b', 1);
+	} else if (val2 < val1 && val1 < val3)
+	{
+		ft_sx(stack_b, 'b', 1);
+	}
+	else if  (val3 < val1 && val1 < val2)
+	{
+		ft_rrx(stack_b, 'b', 1);
+	}
+	else if  (val3 < val2 && val2 < val1)
+	{
+		ft_sx(stack_b, 'b', 1);
+		ft_rrx(stack_b, 'b', 1);
+	}
+	else if  (val2 < val3 && val3 < val1)
+	{
+		ft_rx(stack_b, 'b', 1);
+	}
+	return (1);
+}
+
+int small_sort_desc(t_list **stack_b)
+{
+	int val1;
+	int val2;
+	int val3;
+
+	val1 = ((t_int_cont *)((*stack_b)->content))->index;
+	val2 = ((t_int_cont *)((*stack_b)->next->content))->index;
+	val3 = ((t_int_cont *)((*stack_b)->next->next->content))->index;
+	if (val1 > val3 && val3 > val2)
+	{
+		ft_sx(stack_b, 'b', 1);
+		ft_rx(stack_b, 'b', 1);
+	} else if (val2 > val1 && val1 > val3)
+	{
+		ft_sx(stack_b, 'b', 1);
+	}
+	else if  (val3 > val1 && val1 > val2)
+	{
+		ft_rrx(stack_b, 'b', 1);
+	}
+	else if  (val3 > val2 && val2 > val1)
+	{
+		ft_sx(stack_b, 'b', 1);
+		ft_rrx(stack_b, 'b', 1);
+	}
+	else if  (val2 > val3 && val3 > val1)
+	{
+		ft_rx(stack_b, 'b', 1);
+	}
+	return (1);
+}

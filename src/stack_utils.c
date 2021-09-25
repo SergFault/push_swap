@@ -98,3 +98,17 @@ int needs_rotate_a(t_set *set)
 		return (1);
 	return (0);
 }
+
+
+int get_stack_size(t_list *stack)
+{
+	int c;
+
+	c = 0;
+	while(stack)
+	{
+		stack = stack->next;
+		c++;
+	}
+	return (c);
+}

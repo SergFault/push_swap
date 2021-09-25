@@ -10,7 +10,7 @@
 typedef struct s_data
 {
 	int next;
-	int round;
+	int round_c;
 	int min;
 	int mid;
 	int max;
@@ -60,6 +60,17 @@ int has_sorted (t_list *stack);
 int needs_rotate_a(t_set *set);
 t_int_cont *new_int(char *str_int);
 void init_set(t_set *set);
+int small_sort_b(t_list **stack_b);
+int get_stack_size(t_list *stack);
+int small_sort_desc(t_list **stack_b);
+void ft_sx(t_list **stack_x, char stack_identity, int write);
+void ft_px(t_list **stack_a, t_list **stack_b, char push_to, int write);
+void ft_ss(t_list **stack_a, t_list **stack_b, int write);
+void ft_rx (t_list **stack, char stack_identity, int write);
+void ft_rrx (t_list **stack, char stack_identity, int write);
+void	ft_rrr(t_list **stack_a, t_list **stack_b, int write);
+void	ft_rr(t_list **stack_a, t_list **stack_b, int write);
+
 
 
 #endif

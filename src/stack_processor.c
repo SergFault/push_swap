@@ -1,6 +1,6 @@
 #include "../includes/push_swap.h"
 
-static void ft_sx(t_list **stack_x, char stack_identity, int write)
+void ft_sx(t_list **stack_x, char stack_identity, int write)
 {
 	void *temp;
 	t_list *stack;
@@ -19,7 +19,7 @@ static void ft_sx(t_list **stack_x, char stack_identity, int write)
 	}
 }
 
-static void ft_px(t_list **stack_a, t_list **stack_b, char push_to, int write)
+void ft_px(t_list **stack_a, t_list **stack_b, char push_to, int write)
 {
 	t_list *temp;
 	if (push_to == 'a' && *stack_b)
@@ -43,7 +43,7 @@ static void ft_px(t_list **stack_a, t_list **stack_b, char push_to, int write)
 	}
 }
 
-static void ft_ss(t_list **stack_a, t_list **stack_b, int write)
+void ft_ss(t_list **stack_a, t_list **stack_b, int write)
 {
 	ft_sx(stack_a, 'a', 0);
 	ft_sx(stack_b, 'b', 0);
@@ -51,7 +51,7 @@ static void ft_ss(t_list **stack_a, t_list **stack_b, int write)
 		ft_putstr_fd("ss\n", STDOUT_FILENO);
 }
 
-static void ft_rx (t_list **stack, char stack_identity, int write)
+void ft_rx (t_list **stack, char stack_identity, int write)
 {
 	t_list *last;
 	t_list *temp;
@@ -76,7 +76,7 @@ static void ft_rx (t_list **stack, char stack_identity, int write)
 	}
 }
 
-static void ft_rrx (t_list **stack, char stack_identity, int write)
+void ft_rrx (t_list **stack, char stack_identity, int write)
 {
 	t_list *last;
 	last = *stack;
@@ -99,7 +99,7 @@ static void ft_rrx (t_list **stack, char stack_identity, int write)
 	}
 }
 
-static void	ft_rrr(t_list **stack_a, t_list **stack_b, int write)
+ void	ft_rrr(t_list **stack_a, t_list **stack_b, int write)
 {
 	ft_rrx(stack_a, 'a', 0);
 	ft_rrx(stack_b, 'b', 0);
@@ -107,7 +107,7 @@ static void	ft_rrr(t_list **stack_a, t_list **stack_b, int write)
 		ft_putstr_fd("rrr\n", STDOUT_FILENO);
 }
 
-static void	ft_rr(t_list **stack_a, t_list **stack_b, int write)
+ void	ft_rr(t_list **stack_a, t_list **stack_b, int write)
 {
 	ft_rx(stack_a, 'a', 0);
 	ft_rx(stack_b, 'b', 0);
@@ -115,38 +115,7 @@ static void	ft_rr(t_list **stack_a, t_list **stack_b, int write)
 		ft_putstr_fd("rr\n", STDOUT_FILENO);
 }
 
-int small_sort_b(t_list **stack_b)
-{
-	int val1;
-	int val2;
-	int val3;
 
-	val1 = ((t_int_cont *)((*stack_b)->content))->index;
-	val2 = ((t_int_cont *)((*stack_b)->next->content))->index;
-	val3 = ((t_int_cont *)((*stack_b)->next->next->content))->index;
-	if (val1 < val3 && val3 < val2)
-	{
-		ft_sx(stack_b, 'b', 1);
-		ft_rx(stack_b, 'b', 1);
-	} else if (val2 < val1 && val1 < val3)
-	{
-		ft_sx(stack_b, 'b', 1);
-	}
-	else if  (val3 < val1 && val1 < val2)
-	{
-		ft_rrx(stack_b, 'b', 1);
-	}
-	else if  (val3 < val2 && val2 < val1)
-	{
-		ft_sx(stack_b, 'b', 1);
-		ft_rrx(stack_b, 'b', 1);
-	}
-	else if  (val2 < val3 && val3 < val1)
-	{
-		ft_rx(stack_b, 'b', 1);
-	}
-	return (1);
-}
 
 void perform(int op, t_set *set)
 {

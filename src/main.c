@@ -10,7 +10,7 @@ void print_stacks(t_list *stack_a, t_list *stack_b)
 	{
 		if (stack_a) {
 			printf("index %d \t", ((t_int_cont *) stack_a->content)->index);
-			printf("round %d \t", ((t_int_cont *) stack_a->content)->round);
+			printf("round_c %d \t", ((t_int_cont *) stack_a->content)->round);
 			printf("val %d \t", ((t_int_cont *) stack_a->content)->val);
 			printf("sorted %d \t|", ((t_int_cont *) stack_a->content)->sorted);
 			stack_a = stack_a->next;
@@ -21,7 +21,7 @@ void print_stacks(t_list *stack_a, t_list *stack_b)
 		printf("\t\t");
 		if (stack_b) {
 			printf("index %d \t", ((t_int_cont *) stack_b->content)->index);
-			printf("round %d \t", ((t_int_cont *) stack_b->content)->round);
+			printf("round_c %d \t", ((t_int_cont *) stack_b->content)->round);
 			printf("val %d \t", ((t_int_cont *) stack_b->content)->val);
 			printf("sorted %d \t|", ((t_int_cont *) stack_b->content)->sorted);
 			stack_b = stack_b->next;
@@ -74,7 +74,7 @@ int get_stack_data_round(t_set *set, t_list *stack)
 		}
 		stack = stack->next;
 	}
-	set->s_data->round = round;
+//	set->s_data->round_c = round_c;
 	set->s_data->max = max;
 	set->s_data->min = min;
 	set->s_data->mid = min + ((max - min) / 2);
@@ -95,12 +95,28 @@ int last_lower(t_list *stack)
 	return (0);
 }
 
+int last_bigger(t_list *stack)
+{
+	t_list *iter;
+
+	iter = stack;
+	while(iter->next)
+	{
+		iter = iter->next;
+	}
+	if ( CONT(iter)->index > CONT(stack)->index)
+		return (1);
+	return (0);
+}
+
 void ra_or_rr(t_set *set)
 {
 
-	if (set->stack_b && set->stack_a
-				&& !is_next_eq(set->stack_b, set->s_data->next)
-				&& last_lower(set->stack_b))
+//	if (set->stack_b && set->stack_a
+//				&& !is_next_eq(set->stack_b, set->s_data->next)
+//				&& last_lower(set->stack_b))
+
+		if (set->stack_b && set->stack_a && last_bigger(set->stack_b))
 	{
 //		PRINT
 			perform(RR, set);
@@ -108,6 +124,22 @@ void ra_or_rr(t_set *set)
 	}
 	else
 		perform(RA, set);
+}
+
+void rra_or_rrr(t_set *set)
+{
+
+	if (set->stack_b && set->stack_a && !is_next_eq(set->stack_b,
+													set->s_data->next))
+
+//	if (set->stack_b && set->stack_a && last_bigger(set->stack_b))
+	{
+//		PRINT
+		perform(RRR, set);
+//		PRINT
+	}
+	else
+		perform(RRA, set);
 }
 
 int try_swap_a(t_set *set)
@@ -121,21 +153,55 @@ int try_swap_a(t_set *set)
 	return (0);
 }
 
+int first_split(t_set *set){
+
+
+	get_stack_data_round(set, set->stack_a);
+	while(has_lower(set->stack_a, set->s_data->mid))
+	{
+//		if (is_next_eq(set->stack_a, set->s_data->next) && !needs_rotate_a(set))
+//		{
+//			to_sorted('a', set);
+//			continue ;
+//		}
+		if (lo_e(set->stack_a, set->s_data->mid)
+				 || CONT(set->stack_a)->round > 0)
+		{
+			perform(PB, set);
+		}
+		else
+		{
+//			ra_or_rr(set);
+			perform(RA, set);
+		}
+	}
+//	while (needs_rotate_a(set))
+//	{
+////		perform(RRA, set);
+//		rra_or_rrr(set);
+//	}
+//	print_stacks(set->stack_a, set->stack_b);
+	return (1);
+}
+
 int split_to_b(t_set *set){
 	int chunk;
 
 	get_stack_data_round(set, set->stack_a);
-	chunk = set->s_data->round;
-	while(has_lower(set->stack_a, set->s_data->mid) && is_cur(set->stack_a, chunk))
+	chunk =  CONT(set->stack_a)->round;
+	while(((has_lower(set->stack_a, set->s_data->mid)
+	|| CONT(set->stack_a)->round > 0))
+			&& is_cur(set->stack_a, chunk) && !CONT(set->stack_a)->sorted)
 	{
-//		if (try_swap_a(set))
-//			continue ;
+		if (try_swap_a(set))
+			continue ;
 		if (is_next_eq(set->stack_a, set->s_data->next) && !needs_rotate_a(set))
 		{
 			to_sorted('a', set);
 			continue ;
 		}
-		else if (lo_e(set->stack_a, set->s_data->mid))
+		else if (lo_e(set->stack_a, set->s_data->mid)
+						|| CONT(set->stack_a)->round > 0)
 		{
 			perform(PB, set);
 		}
@@ -147,19 +213,34 @@ int split_to_b(t_set *set){
 	}
 	while (needs_rotate_a(set))
 	{
-		perform(RRA, set);
+//		perform(RRA, set);
+		rra_or_rrr(set);
 	}
 //	print_stacks(set->stack_a, set->stack_b);
 	return (1);
 }
-
+int try_push_sorted(t_set *set)
+{
+	if (!set->stack_b)
+		return (0);
+	if (CONT(set->stack_b)->index == set->s_data->next)
+	{
+//		PRINT
+		to_sorted('b', set);
+		return (1);
+	}
+	return (0);
+}
 
 int split_to_a(t_set *set)
 {
 	get_stack_data_round(set, set->stack_b);
-	set->s_data->round++;
 	while(has_bigger(set->stack_b, set->s_data->mid))
 	{
+//		if (get_stack_size(set->stack_b) == 3)
+//			small_sort_b(&set->stack_b);
+//		if (try_push_sorted(set))
+//			continue ;
 		if (is_next_eq(set->stack_b, set->s_data->next))
 		{
 			to_sorted('b', set);
@@ -167,26 +248,23 @@ int split_to_a(t_set *set)
 		}
 		else if (bigger_e(set->stack_b, set->s_data->mid))
 		{
-			CONT(set->stack_b)->round = set->s_data->round;
+			CONT(set->stack_b)->round = set->s_data->round_c;
 			perform(PA, set);
 		}else
 		{
 			perform(RB, set);
 		}
 	}
+	set->s_data->round_c++;
 //	print_stacks(set->stack_a, set->stack_b);
 	return (1);
 }
 
 int sort(t_set *set)
 {
+	first_split(set);
 	while(!((t_int_cont *)set->stack_a->content)->sorted)
 	{
-
-//		print_stacks(set->stack_a, set->stack_b);
-//		ft_putstr_fd("split to b\n", 1);
-
-		split_to_b(set);
 		while (set->stack_b) {
 
 //			ft_putstr_fd("split to a\n", 1);
@@ -194,6 +272,10 @@ int sort(t_set *set)
 
 			split_to_a(set);
 		}
+//		print_stacks(set->stack_a, set->stack_b);
+//		ft_putstr_fd("split to b\n", 1);
+
+		split_to_b(set);
 //		print_stacks(set->stack_a, set->stack_b);
 	}
 	return 0;

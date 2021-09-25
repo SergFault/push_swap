@@ -21,9 +21,10 @@ void init_set(t_set *set)
 	set->s_data->mid = 0;
 	set->s_data->min = 0;
 	set->s_data->size = 0;
-	set->s_data->round = 1;
+	set->s_data->round_c = 1;
 	set->int_lst = NULL;
 	set->sorted = NULL;
 	set->stack_a = NULL;
 	set->stack_b = NULL;
 }
+
