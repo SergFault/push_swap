@@ -468,15 +468,14 @@ int split_to_b(t_set *set){
 			size -= try_first_a(set);
 			if (size <= 0)
 				break;
-			if ((((((t_int_cont *)set->stack_a->content)->index) <=
-				set->s_data->mid)) &&
-				(((((t_int_cont *)set->stack_a->content)->sorted) == 0)))
-			{
-						ft_px(&set->stack_a, &set->stack_b, 'b', 1);
-			}
-			else if ((((t_int_cont *)set->stack_a->content)->sorted) == 0 &&
-			size != 1) {
-				ft_rx(&set->stack_a, 'a', 1);
+			if ((((t_int_cont *)set->stack_a->content)->sorted) == 0) {
+				if ((((((t_int_cont *) set->stack_a->content)->index) <=
+					  set->s_data->mid))) {
+					ft_px(&set->stack_a, &set->stack_b, 'b', 1);
+				} else
+				{
+					ft_rx(&set->stack_a, 'a', 1);
+				}
 			}
 		size--;
 	}
@@ -543,18 +542,18 @@ int sort(t_set *set)
 	while(!((t_int_cont *)set->stack_a->content)->sorted)
 	{
 
-		print_stacks(set->stack_a, set->stack_b);
-		ft_putstr_fd("split to b\n", 1);
+//		print_stacks(set->stack_a, set->stack_b);
+//		ft_putstr_fd("split to b\n", 1);
 
 		split_to_b(set);
 		while (set->stack_b) {
 
-			ft_putstr_fd("split to a\n", 1);
-			print_stacks(set->stack_a, set->stack_b);
+//			ft_putstr_fd("split to a\n", 1);
+//			print_stacks(set->stack_a, set->stack_b);
 
 			split_to_a(set);
 		}
-		print_stacks(set->stack_a, set->stack_b);
+//		print_stacks(set->stack_a, set->stack_b);
 	}
 	return 0;
 }
