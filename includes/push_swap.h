@@ -5,6 +5,7 @@
 #include <stddef.h>
 #include <limits.h>
 #define CONT(x) ((t_int_cont *)x->content)
+#define PRINT print_stacks(set->stack_a, set->stack_b);
 
 typedef struct s_data
 {
@@ -48,5 +49,17 @@ void perform(int op, t_set *set);
 t_list *copy_stack(t_list *list);
 void index_stack(t_list *stack, t_list *sorted);
 void ft_sort(t_list *list);
+int has_lower(t_list *stack, int val);
+int has_bigger(t_list *stack, int val);
+int lo_e(t_list *stack, int val);
+int bigger_e(t_list *stack, int val);
+int is_next_eq(t_list *stack, int val);
+void to_sorted(char location, t_set *set);
+int is_cur(t_list *stack, int chunk);
+int has_sorted (t_list *stack);
+int needs_rotate_a(t_set *set);
+t_int_cont *new_int(char *str_int);
+void init_set(t_set *set);
+
 
 #endif
