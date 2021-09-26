@@ -1,19 +1,46 @@
 #include "../includes/push_swap.h"
 
-t_list *copy_stack(t_list *list)
-{
-	t_list *new;
-	t_int_cont *new_content;
 
-	new = NULL;
-	while(list)
+int is_space(char ch)
+{
+	if (ch == '\n' || ch == '\t' || ch == '\v'
+		|| ch == ' ' || ch == '\r' || ch == '\f')
+		return 1;
+	return 0;
+}
+
+int has_only_spaces(char *arg)
+{
+	while (arg && *arg)
 	{
-		new_content = malloc(sizeof (t_int_cont));
-		new_content->index = ((t_int_cont*)(list->content))->index;
-		new_content->val = ((t_int_cont*)(list->content))->val;
-		new_content->round = ((t_int_cont*)(list->content))->round;
-		ft_lstadd_back(&new, ft_lstnew(new_content));
-		list = list->next;
+		if (!is_space(*arg))
+			return (0);
+		arg++;
 	}
-	return new;
+	return (1);
+}
+
+int is_num(char ch)
+{
+	if (ch >= '0' && ch <= '9')
+		return (1);
+	return (0);
+}
+
+int is_sign(char ch)
+{
+	if (ch == '-' || ch == '+')
+		return (1);
+	return (0);
+}
+
+int has_number(char *str)
+{
+	while (str && *str)
+	{
+		if (is_num(*str))
+			return (1);
+		str++;
+	}
+	return (0);
 }
