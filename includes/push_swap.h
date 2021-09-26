@@ -70,6 +70,8 @@ void ft_rx (t_list **stack, char stack_identity, int write);
 void ft_rrx (t_list **stack, char stack_identity, int write);
 void	ft_rrr(t_list **stack_a, t_list **stack_b, int write);
 void	ft_rr(t_list **stack_a, t_list **stack_b, int write);
+int is_space(char ch);
+char	**split_arg(char const *s);
 
 
 

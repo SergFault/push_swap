@@ -7,6 +7,8 @@ t_int_cont *new_int(char *str_int)
 
 	i = ft_atoi(str_int);
 	cont = (t_int_cont *) malloc(sizeof(t_int_cont));
+	if (cont == NULL)
+		return NULL;
 	cont->val = i;
 	cont->index = 0;
 	cont->round = 0;

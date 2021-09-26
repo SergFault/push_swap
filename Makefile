@@ -1,7 +1,7 @@
 NAME = push_swap
 
 SRC_FILES = main.c stack_processor.c utils.c sort_utils.c stack_utils.c \
-			init.c
+			init.c args_split.c
 LIBFT_DIR = Libft
 LIBFT = /Libft/libft.a
 LIB			=	-L$(LIBFT_DIR) -lft

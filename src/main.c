@@ -33,23 +33,6 @@ void print_stacks(t_list *stack_a, t_list *stack_b)
 	}
 }
 
-int get_args(int argc, char **argv, t_list **lst)
-{
-    int c;
-	t_int_cont *temp;
-
-    c = 1;
-    if (argc < 2)
-        return (-1);
-    while (c < argc)
-    {
-		temp = new_int(argv[c]);
-        ft_lstadd_back(lst, ft_lstnew(temp));
-		c++;
-    }
-    return (0);
-}
-
 
 int get_stack_data_round(t_set *set, t_list *stack)
 {
@@ -251,15 +234,39 @@ int try_push_sorted(t_set *set)
 	return (0);
 }
 
+int try_push_last_b(t_set *set)
+{
+	t_list *iter;
+	iter = set->stack_b;
+	int c;
+
+	c = 0;
+	while (iter && iter->next)
+	{
+		iter = iter->next;
+		c++;
+	}
+
+	if (is_next_eq(iter, set->s_data->next) && c > 2)
+	{
+//		PRINT
+		perform(RRB, set);
+		CONT(set->stack_b)->sorted = 1;
+		set->s_data->next++;
+		perform(PA, set);
+		perform(RA, set);
+		return (1);
+	}
+	return (0);
+}
+
 int split_to_a(t_set *set)
 {
 	get_stack_data_round(set, set->stack_b);
 	while(has_bigger(set->stack_b, set->s_data->mid))
 	{
-//		if (get_stack_size(set->stack_b) == 3)
-//			small_sort_b(&set->stack_b);
-//		if (try_push_sorted(set))
-//			continue ;
+		if (try_push_last_b(set))
+			continue ;
 		if (is_next_eq(set->stack_b, set->s_data->next))
 		{
 			to_sorted('b', set);
@@ -275,7 +282,6 @@ int split_to_a(t_set *set)
 		}
 	}
 	set->s_data->round_c++;
-//	print_stacks(set->stack_a, set->stack_b);
 	return (1);
 }
 
@@ -284,33 +290,198 @@ int sort(t_set *set)
 	first_split(set);
 	while(!((t_int_cont *)set->stack_a->content)->sorted)
 	{
-		while (set->stack_b) {
-
-//			ft_putstr_fd("split to a\n", 1);
-//			print_stacks(set->stack_a, set->stack_b);
-
+		while (set->stack_b)
+		{
 			split_to_a(set);
 		}
-//		print_stacks(set->stack_a, set->stack_b);
-//		ft_putstr_fd("split to b\n", 1);
-
 		split_to_b(set);
-//		print_stacks(set->stack_a, set->stack_b);
 	}
-//	PRINT
 	return 0;
 }
+
+int is_space(char ch)
+{
+	if (ch == '\n' || ch == '\t' || ch == '\v'
+		   || ch == ' ' || ch == '\r' || ch == '\f')
+		return 1;
+	return 0;
+}
+
+int has_only_spaces(char *arg)
+{
+	while (arg && *arg)
+	{
+		if (!is_space(*arg))
+			return (0);
+		arg++;
+	}
+	return (1);
+}
+
+int is_num(char ch)
+{
+	if (ch >= '0' && ch <= '9')
+		return (1);
+	return (0);
+}
+
+int is_sign(char ch)
+{
+	if (ch == '-' || ch == '+')
+		return (1);
+	return (0);
+}
+
+int has_number(char *str)
+{
+	while (str && *str)
+	{
+		if (is_num(*str))
+			return (1);
+		str++;
+	}
+	return (0);
+}
+
+int valid_str_ints(char *str)
+{
+	int was_sign;
+	int was_num;
+
+	was_sign = 0;
+	was_num = 0;
+	while (*str)
+	{
+		if (is_num(*str)) {
+			was_num = 1;
+		}
+		else if (is_sign(*str) && !was_sign && !was_num)
+		{
+			was_sign = 1;
+		}
+		else if (is_space(*str) && !(was_sign && !was_num))
+		{
+			was_num = 0;
+			was_sign = 0;
+		}
+		else
+			return (0);
+		str++;
+	}
+	return (1);
+}
+
+int check_arg(int argc, char **argv)
+{
+	if (has_only_spaces(argv[argc]))
+		return (1);
+
+	if (!has_number(argv[argc]))
+		return (0);
+
+	if (valid_str_ints(argv[argc]))
+		return (1);
+	return (0);
+}
+void clear_arr(char **str_ar)
+{
+	while (*str_ar)
+	{
+		free(*str_ar);
+		(void) *str_ar++;
+	}
+}
+
+int push_to_list(char **splitted,  t_list **lst)
+{
+	t_int_cont *temp;
+
+	while (splitted && *splitted)
+	{
+		temp = new_int(*splitted);
+		if (!temp) {
+			clear_arr(splitted);
+			ft_lstclear(lst, free);
+			exit(EXIT_FAILURE);
+		}
+		ft_lstadd_back(lst, ft_lstnew(temp));
+		(void)*splitted++;
+	}
+	return (0);
+}
+
+void error_handler()
+{
+	ft_putstr_fd("Error\n", STDOUT_FILENO);
+	exit(EXIT_FAILURE);
+}
+
+int get_args(int argc, char **argv, t_list **lst)
+{
+	int c;
+	char **splitted;
+
+	splitted = NULL;
+	(void) splitted;
+	c = 1;
+	if (argc < 2)
+		exit(EXIT_FAILURE);
+	while (c < argc)
+	{
+		if (check_arg(c, argv))
+			splitted = split_arg(argv[c]);
+		else
+			error_handler();
+		push_to_list(splitted, lst);
+		c++;
+	}
+	return (0);
+}
+
+int check_repeat(t_list *stack)
+{
+
+	while(stack && stack->next)
+	{
+		if (CONT(stack)->val == CONT(stack->next)->val)
+			return (1);
+		stack = stack->next;
+	}
+	return (0);
+}
+
+int is_sorted(t_list *stack)
+{
+	while (stack && stack->next)
+	{
+		if (CONT(stack)->val >= CONT(stack->next)->val)
+			return (0);
+		stack = stack->next;
+	}
+	return (1);
+}
+
 
 int main(int argc, char** argv)
 {
 	t_set set;
 
 	init_set(&set);
-
 	get_args(argc, argv, &set.int_lst);
-	set.sorted = copy_stack(set.int_lst);
-	ft_sort(set.sorted);
-	set.stack_a = copy_stack(set.int_lst);
-	index_stack(set.stack_a, set.sorted);
-	sort(&set);
+
+	if (!is_sorted(set.int_lst))
+	{
+		if (!check_repeat(set.int_lst))
+		{
+			set.sorted = copy_stack(set.int_lst);
+			ft_sort(set.sorted);
+			set.stack_a = copy_stack(set.int_lst);
+			index_stack(set.stack_a, set.sorted);
+			sort(&set);
+		}
+		else
+		{
+			error_handler();
+		}
+	}
 }
