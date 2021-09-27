@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   args_utils.c                                       :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: sergey <sergey@student.42.fr>              +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2021/09/27 23:20:18 by sergey            #+#    #+#             */
+/*   Updated: 2021/09/27 23:20:18 by sergey           ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../includes/push_swap.h"
 
 int	get_args(int argc, char **argv, t_list **lst)
@@ -6,7 +18,6 @@ int	get_args(int argc, char **argv, t_list **lst)
 	char	**splitted;
 
 	splitted = NULL;
-	(void) splitted;
 	c = 1;
 	if (argc < 2)
 		exit(EXIT_FAILURE);

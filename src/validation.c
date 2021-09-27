@@ -1,12 +1,35 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   validation.c                                       :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: sergey <sergey@student.42.fr>              +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2021/09/27 23:24:11 by sergey            #+#    #+#             */
+/*   Updated: 2021/09/27 23:34:18 by sergey           ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../includes/push_swap.h"
 
 int	check_repeat(t_list *stack)
 {
+	t_list *start;
+	t_list *iter;
+
+	iter = stack;
+	start = stack;
+	stack = stack->next;
 	while (stack && stack->next)
 	{
-		if (cont(stack)->val == cont(stack->next)->val)
-			return (1);
+		while (iter != stack)
+		{
+			if (cont(iter)->val == cont(stack->next)->val)
+				return (1);
+			iter = iter->next;
+		}
 		stack = stack->next;
+		iter = start;
 	}
 	return (0);
 }

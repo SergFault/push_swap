@@ -98,5 +98,6 @@ int			split_to_a(t_set *set);
 int			split_to_b(t_set *set);
 int			is_last_sorted(t_list *stack);
 t_int_cont	*cont(t_list *lst);
+void	free_set(t_set *set);
 
 #endif

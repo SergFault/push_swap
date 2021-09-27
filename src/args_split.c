@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   args_split.c                                       :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: sergey <sergey@student.42.fr>              +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2021/09/27 23:20:38 by sergey            #+#    #+#             */
+/*   Updated: 2021/09/27 23:20:44 by sergey           ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../includes/push_swap.h"
 
 static int	free_fail(char **str_a, int c)
@@ -10,6 +22,7 @@ static int	free_fail(char **str_a, int c)
 		free(str_a[c]);
 		counter++;
 	}
+	free(str_a);
 	return (0);
 }
 

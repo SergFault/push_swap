@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   stack_utils_a.c                                    :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: sergey <sergey@student.42.fr>              +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2021/09/27 23:23:46 by sergey            #+#    #+#             */
+/*   Updated: 2021/09/27 23:25:51 by sergey           ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../includes/push_swap.h"
 
 int	has_lower(t_list *stack, int val)
@@ -11,7 +23,7 @@ int	has_lower(t_list *stack, int val)
 	return (0);
 }
 
-int	has_sorted (t_list *stack)
+int	has_sorted(t_list *stack)
 {
 	while (stack->next)
 	{

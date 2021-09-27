@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   main.c                                             :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: sergey <sergey@student.42.fr>              +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2021/09/27 23:22:26 by sergey            #+#    #+#             */
+/*   Updated: 2021/09/27 23:28:02 by sergey           ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../includes/push_swap.h"
 
 int	sort(t_set *set)
@@ -21,7 +33,9 @@ int	sort(t_set *set)
 int	main(int argc, char **argv)
 {
 	t_set	set;
+	t_data	data;
 
+	set.s_data = &data;
 	init_set(&set);
 	get_args(argc, argv, &set.int_lst);
 	if (!is_sorted(set.int_lst))
@@ -36,7 +50,10 @@ int	main(int argc, char **argv)
 		}
 		else
 		{
+			free_set(&set);
 			error_handler();
 		}
 	}
+	free_set(&set);
+	return (EXIT_SUCCESS);
 }
