@@ -8,13 +8,13 @@ void	first_split(t_set *set)
 		if (is_next_eq(set->stack_a, set->s_data->next))
 		{
 			set->s_data->next++;
-			CONT(set->stack_a)->sorted = 1;
+			cont(set->stack_a)->sorted = 1;
 			perform(PB, set);
 			perform(RB, set);
 			continue ;
 		}
 		if (lo_e(set->stack_a, set->s_data->mid)
-			|| CONT(set->stack_a)->round > 0)
+			|| cont(set->stack_a)->round > 0)
 			perform(PB, set);
 		else
 			perform(RA, set);
@@ -24,7 +24,7 @@ void	first_split(t_set *set)
 		perform(RRB, set);
 		perform(PA, set);
 	}
-	while (CONT(set->stack_a)->sorted)
+	while (cont(set->stack_a)->sorted)
 		perform(RA, set);
 }
 
@@ -33,10 +33,10 @@ int	split_to_b(t_set *set)
 	int	chunk;
 
 	get_stack_data_round(set, set->stack_a);
-	chunk = CONT(set->stack_a)->round;
+	chunk = cont(set->stack_a)->round;
 	while (((has_lower(set->stack_a, set->s_data->mid)
-				|| CONT(set->stack_a)->round > 0))
-		  && is_chunk(set->stack_a, chunk) && !CONT(set->stack_a)->sorted)
+				|| cont(set->stack_a)->round > 0))
+		  && is_chunk(set->stack_a, chunk) && !cont(set->stack_a)->sorted)
 	{
 		if (try_swap_a(set))
 			continue ;
@@ -46,7 +46,7 @@ int	split_to_b(t_set *set)
 			continue ;
 		}
 		else if (lo_e(set->stack_a, set->s_data->mid)
-			|| CONT(set->stack_a)->round > 0)
+			|| cont(set->stack_a)->round > 0)
 			perform(PB, set);
 		else
 			perform(RA, set);
@@ -70,7 +70,7 @@ int	split_to_a(t_set *set)
 		}
 		else if (bigger_e(set->stack_b, set->s_data->mid))
 		{
-			CONT(set->stack_b)->round = set->s_data->round_c;
+			cont(set->stack_b)->round = set->s_data->round_c;
 			perform(PA, set);
 		}
 		else

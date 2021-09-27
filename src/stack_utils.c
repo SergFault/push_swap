@@ -4,13 +4,13 @@ void	to_sorted(char location, t_set *set)
 {
 	if (location == 'a')
 	{
-		CONT(set->stack_a)->sorted = 1;
+		cont(set->stack_a)->sorted = 1;
 		perform(RA, set);
 		set->s_data->next++;
 	}
 	else
 	{
-		CONT(set->stack_b)->sorted = 1;
+		cont(set->stack_b)->sorted = 1;
 		perform(PA, set);
 		perform(RA, set);
 		set->s_data->next++;
@@ -24,7 +24,7 @@ int	needs_rotate_a(t_set *set)
 	last = set->stack_a;
 	while (last->next)
 		last = last->next;
-	if (CONT(last)->sorted == 0 && has_sorted(set->stack_a))
+	if (cont(last)->sorted == 0 && has_sorted(set->stack_a))
 		return (1);
 	return (0);
 }

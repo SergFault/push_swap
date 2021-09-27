@@ -4,7 +4,7 @@ int	check_repeat(t_list *stack)
 {
 	while (stack && stack->next)
 	{
-		if (CONT(stack)->val == CONT(stack->next)->val)
+		if (cont(stack)->val == cont(stack->next)->val)
 			return (1);
 		stack = stack->next;
 	}

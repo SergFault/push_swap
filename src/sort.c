@@ -5,11 +5,11 @@ int	small_sort(t_set *set)
 	int	min_index;
 
 	min_index = find_min_index(set->stack_a);
-	if (CONT(set->stack_a)->index == min_index + 2)
+	if (cont(set->stack_a)->index == min_index + 2)
 		perform(RA, set);
-	if (CONT(set->stack_a->next)->index == min_index + 2)
+	if (cont(set->stack_a->next)->index == min_index + 2)
 		perform(RRA, set);
-	if (CONT(set->stack_a->next)->index == min_index)
+	if (cont(set->stack_a->next)->index == min_index)
 		perform(SA, set);
 	return (0);
 }
@@ -22,7 +22,7 @@ int	four_sort(t_set *set)
 		action = RA;
 	else
 		action = RRA;
-	while (CONT(set->stack_a)->index != 0)
+	while (cont(set->stack_a)->index != 0)
 		perform(action, set);
 	perform(PB, set);
 	small_sort(set);
@@ -38,14 +38,14 @@ int	five_sort(t_set *set)
 		action = RA;
 	else
 		action = RRA;
-	while (CONT(set->stack_a)->index != 0)
+	while (cont(set->stack_a)->index != 0)
 		perform(action, set);
 	perform(PB, set);
 	if (find_pos(set->stack_a, 1) <= 2)
 		action = RA;
 	else
 		action = RRA;
-	while (CONT(set->stack_a)->index != 1)
+	while (cont(set->stack_a)->index != 1)
 		perform(action, set);
 	perform(PB, set);
 	small_sort(set);
