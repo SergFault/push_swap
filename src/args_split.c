@@ -1,11 +1,11 @@
 #include "../includes/push_swap.h"
 
-static int free_fail(char **str_a, int c)
+static int	free_fail(char **str_a, int c)
 {
-	int counter;
+	int	counter;
 
 	counter = 0;
-	while(counter < c)
+	while (counter < c)
 	{
 		free(str_a[c]);
 		counter++;

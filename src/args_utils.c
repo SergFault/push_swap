@@ -1,9 +1,9 @@
 #include "../includes/push_swap.h"
 
-int get_args(int argc, char **argv, t_list **lst)
+int	get_args(int argc, char **argv, t_list **lst)
 {
-	int c;
-	char **splitted;
+	int		c;
+	char	**splitted;
 
 	splitted = NULL;
 	(void) splitted;

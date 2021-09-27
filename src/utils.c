@@ -1,15 +1,14 @@
 #include "../includes/push_swap.h"
 
-
-int is_space(char ch)
+int	is_space(char ch)
 {
 	if (ch == '\n' || ch == '\t' || ch == '\v'
 		|| ch == ' ' || ch == '\r' || ch == '\f')
-		return 1;
-	return 0;
+		return (1);
+	return (0);
 }
 
-int has_only_spaces(char *arg)
+int	has_only_spaces(char *arg)
 {
 	while (arg && *arg)
 	{
@@ -20,21 +19,21 @@ int has_only_spaces(char *arg)
 	return (1);
 }
 
-int is_num(char ch)
+int	is_num(char ch)
 {
 	if (ch >= '0' && ch <= '9')
 		return (1);
 	return (0);
 }
 
-int is_sign(char ch)
+int	is_sign(char ch)
 {
 	if (ch == '-' || ch == '+')
 		return (1);
 	return (0);
 }
 
-int has_number(char *str)
+int	has_number(char *str)
 {
 	while (str && *str)
 	{

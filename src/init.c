@@ -1,22 +1,22 @@
 #include "../includes/push_swap.h"
 
-t_int_cont *new_int(char *str_int)
+t_int_cont	*new_int(char *str_int)
 {
-	int i;
-	t_int_cont *cont;
+	int			i;
+	t_int_cont	*cont;
 
 	i = ft_atoi(str_int);
 	cont = (t_int_cont *) malloc(sizeof(t_int_cont));
 	if (cont == NULL)
-		return NULL;
+		return (NULL);
 	cont->val = i;
 	cont->index = 0;
 	cont->round = 0;
 	cont->sorted = 0;
-	return cont;
+	return (cont);
 }
 
-void init_set(t_set *set)
+void	init_set(t_set *set)
 {
 	set->s_data->next = 0;
 	set->s_data->max = 0;
@@ -29,4 +29,3 @@ void init_set(t_set *set)
 	set->stack_a = NULL;
 	set->stack_b = NULL;
 }
-

@@ -1,49 +1,47 @@
-#ifndef FT_PUSH_SWAP_H
-# define FT_PUSH_SWAP_H
+#ifndef PUSH_SWAP_H
+# define PUSH_SWAP_H
 
-#include "../Libft/libft.h"
-#include <stddef.h>
-#include <limits.h>
-#define CONT(x) ((t_int_cont *)x->content)
-#define PRINT print_stacks(set->stack_a, set->stack_b);
+# include "../Libft/libft.h"
+# include <stddef.h>
+# include <limits.h>
 
 typedef struct s_data
 {
-	int next;
-	int round_c;
-	int min;
-	int mid;
-	int max;
-	int size;
-} t_data;
+	int	next;
+	int	round_c;
+	int	min;
+	int	mid;
+	int	max;
+	int	size;
+}				t_data;
 
 typedef struct s_set{
-	t_data *s_data;
-	t_list *int_lst;
-	t_list *sorted;
-	t_list *stack_a;
-	t_list *stack_b;
-} t_set;
+	t_data	*s_data;
+	t_list	*int_lst;
+	t_list	*sorted;
+	t_list	*stack_a;
+	t_list	*stack_b;
+}				t_set;
 
 typedef struct s_int_cont
 {
-	int val;
-	int index;
-	int round;
-	int sorted;
-} t_int_cont;
+	int	val;
+	int	index;
+	int	round;
+	int	sorted;
+}				t_int_cont;
 
-#define SA 1
-#define SB 2
-#define SS 3
-#define RA 4
-#define RB 5
-#define RRA 6
-#define RRB 7
-#define RRR 8
-#define PA 9
-#define PB 10
-#define RR 11
+# define SA 1
+# define SB 2
+# define SS 3
+# define RA 4
+# define RB 5
+# define RRA 6
+# define RRB 7
+# define RRR 8
+# define PA 9
+# define PB 10
+# define RR 11
 
 void		perform(int op, t_set *set);
 t_list		*copy_stack(t_list *list);
@@ -74,7 +72,7 @@ int			is_space(char ch);
 char		**split_arg(char const *s);
 int			small_sort(t_set *set);
 int			default_sort(t_set *set);
-int			first_split(t_set *set);
+void		first_split(t_set *set);
 int			four_sort(t_set *set);
 int			five_sort(t_set *set);
 int			count_elements(t_list *stack);
@@ -85,10 +83,20 @@ int			has_number(char *str);
 int			valid_str_ints(char *str);
 int			check_arg(int argc, char **argv);
 void		clear_arr(char **str_ar);
-int			push_to_list(char **splitted,  t_list **lst);
-void		error_handler();
+int			push_to_list(char **splitted, t_list **lst);
+void		error_handler(void);
 int			get_args(int argc, char **argv, t_list **lst);
 int			check_repeat(t_list *stack);
 int			is_sorted(t_list *stack);
+void		rra_or_rrr(t_set *set);
+int			try_swap_a(t_set *set);
+int			try_push_last_b(t_set *set);
+void		get_stack_data_round(t_set *set, t_list *stack);
+int			find_min_index(t_list *stack);
+int			find_pos(t_list *stack, int index);
+int			split_to_a(t_set *set);
+int			split_to_b(t_set *set);
+int			is_last_sorted(t_list *stack);
+t_int_cont	*cont(t_list *lst);
 
 #endif
