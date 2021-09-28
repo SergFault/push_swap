@@ -54,7 +54,7 @@ int			bigger_e(t_list *stack, int val);
 int			is_next_eq(t_list *stack, int val);
 void		to_sorted(char location, t_set *set);
 int			is_chunk(t_list *stack, int chunk);
-int			has_sorted (t_list *stack);
+int			has_sorted(t_list *stack);
 int			needs_rotate_a(t_set *set);
 t_int_cont	*new_int(char *str_int);
 void		init_set(t_set *set);
@@ -64,8 +64,8 @@ int			small_sort_desc(t_list **stack_b);
 void		ft_sx(t_list **stack_x, char stack_identity, int write);
 void		ft_px(t_list **stack_a, t_list **stack_b, char push_to, int write);
 void		ft_ss(t_list **stack_a, t_list **stack_b, int write);
-void		ft_rx (t_list **stack, char stack_identity, int write);
-void		ft_rrx (t_list **stack, char stack_identity, int write);
+void		ft_rx(t_list **stack, char stack_identity, int write);
+void		ft_rrx(t_list **stack, char stack_identity, int write);
 void		ft_rrr(t_list **stack_a, t_list **stack_b, int write);
 void		ft_rr(t_list **stack_a, t_list **stack_b, int write);
 int			is_space(char ch);
@@ -98,6 +98,6 @@ int			split_to_a(t_set *set);
 int			split_to_b(t_set *set);
 int			is_last_sorted(t_list *stack);
 t_int_cont	*cont(t_list *lst);
-void	free_set(t_set *set);
+void		free_set(t_set *set);
 
 #endif

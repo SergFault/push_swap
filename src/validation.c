@@ -6,7 +6,7 @@
 /*   By: sergey <sergey@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/27 23:24:11 by sergey            #+#    #+#             */
-/*   Updated: 2021/09/27 23:34:18 by sergey           ###   ########.fr       */
+/*   Updated: 2021/09/27 23:35:22 by sergey           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,8 +14,8 @@
 
 int	check_repeat(t_list *stack)
 {
-	t_list *start;
-	t_list *iter;
+	t_list	*start;
+	t_list	*iter;
 
 	iter = stack;
 	start = stack;

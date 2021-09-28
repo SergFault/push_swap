@@ -6,7 +6,7 @@
 /*   By: sergey <sergey@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/27 23:23:16 by sergey            #+#    #+#             */
-/*   Updated: 2021/09/27 23:23:16 by sergey           ###   ########.fr       */
+/*   Updated: 2021/09/28 14:04:31 by sergey           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,7 +57,7 @@ void	ft_px(t_list **stack_a, t_list **stack_b, char push_to, int write)
 	}
 }
 
-void	ft_rx (t_list **stack, char stack_identity, int write)
+void	ft_rx(t_list **stack, char stack_identity, int write)
 {
 	t_list	*last;
 	t_list	*temp;
@@ -83,7 +83,7 @@ void	ft_rx (t_list **stack, char stack_identity, int write)
 	}
 }
 
-void	ft_rrx (t_list **stack, char stack_identity, int write)
+void	ft_rrx(t_list **stack, char stack_identity, int write)
 {
 	t_list	*last;
 
