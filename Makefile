@@ -5,21 +5,23 @@ SRC_FILES 	= main.c stack_processor.c utils.c sort_utils.c stack_utils.c \
 				optimization_actions.c sort.c stack_splits.c perform.c \
 				stack_processor_binary_ops.c stack_utils_a.c stack_utils_b.c
 LIBFT_DIR 	= Libft
-LIBFT 		= /Libft/libft.a
-LIB			=	-L$(LIBFT_DIR) -lft
-INCLUDES 	= includes
-FLAGS		=	-Wall -Wextra -Werror -std=c99 -g #-fsanitize=leak \
+LIBFT 		= ./Libft/libft.a
+LIB			= -L./$(LIBFT_DIR) -lft
+HDR			= includes/push_swap.h
+FLAGS		= -Wall -Wextra -Werror -std=c99 #-g -fsanitize=leak \
 -fsanitize=address
 SRC 		= $(addprefix src/, ${SRC_FILES})
-OBJS		= 	${SRC:.c=.o}
+OBJS		= ${SRC:.c=.o}
 
-%.o:		%.c
+%.o:		%.c $(HDR)
 			$(CC) $(FLAGS) -c $< -o $@
 
-all: 		LIBFT $(NAME)
+all: 		make_lib build_all
 
-$(NAME):	$(OBJS) $(INCLUDES)/push_swap.h
-			$(CC) $(FLAGS) -o $@ $^ $(LIB)
+build_all:	$(LIBFT) $(NAME)
+
+$(NAME):	$(OBJS) $(HDR) $(LIBFT)
+			$(CC) $(FLAGS) $(OBJS) -o $@ $(LIB)
 
 val:		${NAME}
 			valgrind \
@@ -40,8 +42,8 @@ fclean:		clean
 
 re:			fclean all
 
-LIBFT:
+make_lib:
 			make -C $(LIBFT_DIR)
 			make bonus -C $(LIBFT_DIR)
 
-.PHONY: val re all clean fclean bonus
+.PHONY: val re all clean fclean make_lib build_all
