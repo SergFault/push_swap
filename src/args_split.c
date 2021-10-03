@@ -57,7 +57,7 @@ static int	ft_parse(char **str, const char *src, size_t d_snaps)
 		size = 0;
 		while (is_space(*src) && *src)
 			src++;
-		while (!(is_space(*src) && *src))
+		while (!is_space(*src) && *src)
 		{
 			src++;
 			size++;

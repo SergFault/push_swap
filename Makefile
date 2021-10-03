@@ -21,7 +21,7 @@ LIBFT_DIR 	= Libft
 LIBFT 		= ./Libft/libft.a
 LIB			= -L./$(LIBFT_DIR) -lft
 HDR			= includes/push_swap.h
-FLAGS		= -Wall -Wextra -Werror -std=c99 #-g -fsanitize=leak \
+FLAGS		= -Wall -Wextra -Werror -std=c99 -g # -fsanitize=leak \
 -fsanitize=address
 SRC 		= $(addprefix src/, ${SRC_FILES})
 OBJS		= ${SRC:.c=.o}
@@ -36,7 +36,7 @@ build_all:	$(LIBFT) $(NAME)
 $(NAME):	$(OBJS) $(HDR) $(LIBFT)
 			$(CC) $(FLAGS) $(OBJS) -o $@ $(LIB)
 
-val:		${NAME}
+val:		$(NAME)
 			valgrind \
 				--leak-check=full \
 				--show-leak-kinds=all \
@@ -57,6 +57,5 @@ re:			fclean all
 
 make_lib:
 			make -C $(LIBFT_DIR)
-			make bonus -C $(LIBFT_DIR)
 
 .PHONY: val re all clean fclean make_lib build_all
