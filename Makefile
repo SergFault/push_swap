@@ -1,4 +1,17 @@
+# **************************************************************************** #
+#                                                                              #
+#                                                         :::      ::::::::    #
+#    Makefile                                           :+:      :+:    :+:    #
+#                                                     +:+ +:+         +:+      #
+#    By: sergey <sergey@student.42.fr>              +#+  +:+       +#+         #
+#                                                 +#+#+#+#+#+   +#+            #
+#    Created: 2021/10/03 15:05:36 by sergey            #+#    #+#              #
+#    Updated: 2021/10/03 15:05:36 by sergey           ###   ########.fr        #
+#                                                                              #
+# **************************************************************************** #
+
 NAME = push_swap
+CC = clang
 
 SRC_FILES 	= main.c stack_processor.c utils.c sort_utils.c stack_utils.c \
 				init.c args_split.c validation.c mem_utils.c args_utils.c \
